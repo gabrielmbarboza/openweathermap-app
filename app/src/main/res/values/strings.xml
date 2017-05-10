@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">OpenweathermapApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="api_id">d5869abd86aabfbaafd62d585383c182</string>
+    <string name="ws_url">api.openweathermap.org/data/2.5/forecast?q=</string>
+    <string name="max_temp">Máxima: %s</string>
+    <string name="min_temp">Minima: %s</string>
+</resources>
