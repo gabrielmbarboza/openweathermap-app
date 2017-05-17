@@ -35,10 +35,23 @@ public class WeatherArrayAdapter extends ArrayAdapter<Weather> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.list_item, parent, false);
+            viewHolder.conditionIV = (ImageView) convertView.findViewById(R.id.condition_iv);
+            viewHolder.maxTV = (TextView) convertView.findViewById(R.id.max_tv);
+            viewHolder.minTV = (TextView) convertView.findViewById(R.id.min_tv);
+            convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        if(bitmaps.containsKey(day.iconUrlPath)) {
+            viewHolder.conditionIV.setImageBitmap(bitmaps.get(day.iconUrlPath));
+            Context context = getContext();
+            viewHolder.dayTV.setText(context.getString(R.string.description, day.weekDay, day.description));
+            viewHolder.maxTV.setText(context.getString(R.string.max_temp, day.max));
+            viewHolder.minTV.setText(context.getString(R.string.min_temp, day.min));
+        }
+
+      return convertView;
     }
 
     private static class ViewHolder {
