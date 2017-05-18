@@ -14,7 +14,7 @@ public class Weather {
     public Weather(long timestamp, double max, double min, String description, String icon) {
         this.max = max;
         this.min = min;
-        this.weekDay = Util.convertTimestampToDay(timestamp);
+        this.weekDay = Util.convertTimestampToDayOfWeek(timestamp);
         this.description = description;
         this.iconUrlPath = "http://openweathermap.org/img/w/" + icon + ".png";
 

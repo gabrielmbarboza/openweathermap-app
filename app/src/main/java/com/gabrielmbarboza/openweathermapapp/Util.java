@@ -9,7 +9,7 @@ import java.util.TimeZone;
  */
 
 public class Util {
-    public static String convertTimestampToDay(long timestamp) {
+    public static String convertTimestampToDayOfWeek(long timestamp) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(timestamp);
         TimeZone timeZone = TimeZone.getDefault();

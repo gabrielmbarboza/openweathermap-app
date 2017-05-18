@@ -1,17 +1,11 @@
 package com.gabrielmbarboza.openweathermapapp;
 
-import android.content.Context;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Calendar;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -27,6 +21,6 @@ public class UtilTest {
 
         long day = Calendar.getInstance().getTimeInMillis();
 
-        assertEquals("Monday", util.convertTimestampToDay(day));
+        assertEquals("Thursday", util.convertTimestampToDayOfWeek(day));
     }
 }

@@ -2,9 +2,11 @@ package com.gabrielmbarboza.openweathermapapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -23,6 +26,8 @@ import java.util.Map;
  */
 
 public class WeatherArrayAdapter extends ArrayAdapter<Weather> {
+    private static final String TAG = "WeatherArrayAdapter";
+
     private Map<String, Bitmap> bitmaps = new HashMap<>();
 
     public WeatherArrayAdapter(Context context, List<Weather> weatherForecast) {
@@ -81,7 +86,18 @@ public class WeatherArrayAdapter extends ArrayAdapter<Weather> {
 
             try {
                 URL imgUrl = new URL(params[0]);
+                connection = (HttpURLConnection) imgUrl.openConnection();
+
+                try (InputStream inputStream = connection.getInputStream()){
+                    bitmap = BitmapFactory.decodeStream(inputStream);
+                    bitmaps.put(params[0], bitmap);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+            } finally {
+                connection.disconnect();
             }
 
             return bitmap;
@@ -89,7 +105,7 @@ public class WeatherArrayAdapter extends ArrayAdapter<Weather> {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-
+          imageView.setImageBitmap(bitmap);
         }
     }
 }
