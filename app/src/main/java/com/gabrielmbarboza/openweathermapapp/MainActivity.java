@@ -1,10 +1,13 @@
 package com.gabrielmbarboza.openweathermapapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SyncStatusObserver;
 import android.os.AsyncTask;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,19 +42,21 @@ public class MainActivity extends AppCompatActivity {
 
         weatherLV = (ListView) findViewById(R.id.weather_lv);
         weatherArrayAdapter = new WeatherArrayAdapter(this, weatherList);
-        weatherLV.setAdapter(weatherArrayAdapter);
+        //weatherLV.setAdapter(weatherArrayAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText location = (EditText) findViewById(R.id.location_et);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                //EditText location = (EditText) findViewById(R.id.location_et);
+                String city = preferences.getString("city", "");
                 String appID = getString(R.string.app_id);
                 String wsUrl = getString(R.string.ws_url);
                 String owmApiUrl = null;
-
+                Log.d("MainActivity", city + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 try {
-                    owmApiUrl = wsUrl + URLEncoder.encode(location.getText().toString(), "UTF-8")
+                    owmApiUrl = wsUrl + URLEncoder.encode(city, "UTF-8")
                             + "&units=metric&APPID=" + appID;
 
                     URL url = new URL(owmApiUrl);
@@ -63,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         WeatherTask weatherTask = new WeatherTask();
                         weatherTask.execute(url);
                     } else {
-                        Snackbar.make(findViewById(R.id.coordinatorLayout), R.string.invalid_url, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(R.id.coordinatorLayout), "R.string.invalid_url", Snackbar.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     Log.e("MainActivity", e.getMessage(), e);
