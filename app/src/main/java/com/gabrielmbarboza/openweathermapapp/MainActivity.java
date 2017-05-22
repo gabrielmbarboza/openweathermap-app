@@ -1,8 +1,8 @@
 package com.gabrielmbarboza.openweathermapapp;
 
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.content.SyncStatusObserver;
+
 import android.os.AsyncTask;
 
 import android.content.Intent;
@@ -10,28 +10,36 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ListView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity {
-    private WeatherArrayAdapter weatherArrayAdapter;
-    private ListView weatherLV;
-    private List<Weather> weatherList;
+    private WeatherAdapter weatherAdapter;
+    private RecyclerView recyclerView;
+    private String weatherURL;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,43 +48,31 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        weatherLV = (ListView) findViewById(R.id.weather_lv);
-        weatherArrayAdapter = new WeatherArrayAdapter(this, weatherList);
-        //weatherLV.setAdapter(weatherArrayAdapter);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        String city = preferences.getString("city", "");
+        String unit = preferences.getString("degree_scale", "metric");
+        String appID = getText(R.string.app_id).toString();
+        String wsUrl = getText(R.string.ws_url).toString();
+
+        try {
+            weatherURL = wsUrl + URLEncoder.encode(city, "UTF-8")
+                    + "&units=" + unit + "&APPID=" + appID + "&cnt=7&lang=pt";
+            Log.d("URL: ", weatherURL);
+        } catch (Exception e) {
+            Log.e("MainActivity", e.getMessage(), e);
+        }
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
             @Override
-            public void onClick(View view) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                //EditText location = (EditText) findViewById(R.id.location_et);
-                String city = preferences.getString("city", "");
-                String appID = getString(R.string.app_id);
-                String wsUrl = getString(R.string.ws_url);
-                String owmApiUrl = null;
-                Log.d("MainActivity", city + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                try {
-                    owmApiUrl = wsUrl + URLEncoder.encode(city, "UTF-8")
-                            + "&units=metric&APPID=" + appID;
-
-                    URL url = new URL(owmApiUrl);
-
-                    if(url != null) {
-                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-                        WeatherTask weatherTask = new WeatherTask();
-                        weatherTask.execute(url);
-                    } else {
-                        Snackbar.make(findViewById(R.id.coordinatorLayout), "R.string.invalid_url", Snackbar.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    Log.e("MainActivity", e.getMessage(), e);
-                }
-
-
+            public void onRefresh() {
+                new WeatherTask().execute();
             }
         });
+
+        new WeatherTask().execute();
+
     }
 
     @Override
@@ -103,26 +99,79 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class WeatherTask extends AsyncTask<URL, Void, JSONObject> {
+    private class WeatherTask extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        HttpURLConnection connection = null;
+        URL url = null;
+
         @Override
-        protected JSONObject doInBackground(URL... params) {
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                url = new URL(weatherURL);
+            }
+            catch (MalformedURLException e) {
+                Snackbar.make(findViewById(R.id.coordinatorLayout),
+                        "Erro no formato da URL", Snackbar.LENGTH_LONG).show();
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setReadTimeout(10000);
+                connection.setConnectTimeout(15000);
+                connection.setRequestMethod("GET");
+
+                if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    InputStream in = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    StringBuilder result = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        result.append(line);
+                    }
+
+                    return result.toString();
+                } else {
+                    return ("connection fail");
+                }
+
+            } catch (IOException ioe) {
+                Snackbar.make(findViewById(R.id.coordinatorLayout),
+                        "Erro no formato da URL", Snackbar.LENGTH_LONG).show();
+                Log.e("MainActivity", ioe.getMessage(), ioe);
+            } finally {
+                connection.disconnect();
+            }
+
             return null;
         }
 
         @Override
-        protected void onPostExecute(JSONObject weather) {
-           getJsonToArrayList(weather);
-            weatherArrayAdapter.notifyDataSetChanged();
-            weatherLV.smoothScrollToPosition(0);
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            getJsonToArrayList(result);
+            swipeRefreshLayout.setRefreshing(false);
         }
 
-        private void getJsonToArrayList(JSONObject weatherForecast) {
-            weatherList.clear();
+        private void getJsonToArrayList(String result) {
+            List<Weather> weatherList = new ArrayList<Weather>();
 
             try {
-                JSONArray list = weatherForecast.getJSONArray("list");
+                JSONObject json =  new JSONObject(result);
 
-                for (int i = 0; i < databaseList().length; i++) {
+                JSONArray list = json.getJSONArray("list");
+                Log.d("JSONARRAY: ", list.toString());
+                for (int i = 0; i < list.length(); i++) {
                     JSONObject day = list.getJSONObject(i);
                     JSONObject temperatures = day.getJSONObject("temp");
                     JSONObject weather = day.getJSONArray("weather").getJSONObject(0);
@@ -135,6 +184,10 @@ public class MainActivity extends AppCompatActivity {
                             weather.getString("icon")
                     ));
                 }
+                recyclerView = (RecyclerView) findViewById(R.id.weather_rv);
+                weatherAdapter = new WeatherAdapter(MainActivity.this, weatherList);
+                recyclerView.setAdapter(weatherAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
             } catch (JSONException e) {
                 Log.e("MainActivity", e.getMessage(), e);
             }

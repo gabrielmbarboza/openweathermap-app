@@ -11,7 +11,7 @@ import java.util.TimeZone;
 public class Util {
     public static String convertTimestampToDayOfWeek(long timestamp) {
         Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(timestamp);
+        cal.setTimeInMillis(timestamp * 1000L);
         TimeZone timeZone = TimeZone.getDefault();
         cal.add(Calendar.MILLISECOND, timeZone.getOffset(cal.getTimeInMillis()));
         SimpleDateFormat df = new SimpleDateFormat("EEEE");
