@@ -3,6 +3,7 @@ package com.gabrielmbarboza.openweathermapapp;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 
 import android.content.Intent;
@@ -186,11 +187,31 @@ public class MainActivity extends AppCompatActivity {
                 }
                 recyclerView = (RecyclerView) findViewById(R.id.weather_rv);
                 weatherAdapter = new WeatherAdapter(MainActivity.this, weatherList);
+                weatherAdapter.setClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int pos = recyclerView.indexOfChild(v);
+                        Log.d("ITEM POSITION:", " " + pos);
+                    }
+                });
                 recyclerView.setAdapter(weatherAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
             } catch (JSONException e) {
                 Log.e("MainActivity", e.getMessage(), e);
             }
         }
+    }
+
+   private boolean connectivityVerify() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+
+        if (connectivityManager.getActiveNetworkInfo() != null
+                && connectivityManager.getActiveNetworkInfo().isAvailable()
+                && connectivityManager.getActiveNetworkInfo().isConnected()) {
+            connected = true;
+        }
+
+        return connected;
     }
 }

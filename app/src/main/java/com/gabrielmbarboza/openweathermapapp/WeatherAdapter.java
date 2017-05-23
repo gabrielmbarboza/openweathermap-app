@@ -27,6 +27,7 @@ public class WeatherAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolde
     private List<Weather> weatherList;
     private LayoutInflater inflater;
     private Context context;
+    private View.OnClickListener mClickListener;
 
     public WeatherAdapter(Context context, List<Weather> weatherList) {
         this.context = context;
@@ -38,7 +39,12 @@ public class WeatherAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.recycler_item, parent, false);
         WeatherHolder weatherHolder = new WeatherHolder(view);
-
+        weatherHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClickListener.onClick(v);
+            }
+        });
         return weatherHolder;
     }
 
@@ -69,7 +75,11 @@ public class WeatherAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolde
         return weatherList.size();
     }
 
-    public static class WeatherHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void setClickListener(View.OnClickListener callback) {
+        mClickListener = callback;
+    }
+
+    public static class WeatherHolder extends RecyclerView.ViewHolder {
        public TextView maxTV;
        public TextView minTV;
        public TextView dayTV;
@@ -78,20 +88,10 @@ public class WeatherAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolde
        public WeatherHolder(View itemView) {
            super(itemView);
 
-           itemView.setOnClickListener(this);
-
            dayTV = (TextView) itemView.findViewById(R.id.day_tv);
            maxTV = (TextView) itemView.findViewById(R.id.max_tv);
            minTV = (TextView) itemView.findViewById(R.id.min_tv);
            conditionIV = (ImageView) itemView.findViewById(R.id.condition_iv);
        }
-
-        @Override
-        public void onClick(View v) {
-            Intent weatherDetails = new Intent(v.getContext(), WeatherDetailsActivity.class);
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v.getContext());
-            sp.edit().putString("minDetail", minTV.getText().toString());
-            v.getContext().startActivity(weatherDetails);
-        }
     }
 }

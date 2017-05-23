@@ -1,5 +1,7 @@
 package com.gabrielmbarboza.openweathermapapp;
 
+import android.net.ConnectivityManager;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
