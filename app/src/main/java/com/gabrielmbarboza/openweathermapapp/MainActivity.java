@@ -13,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject json =  new JSONObject(result);
 
                 JSONArray list = json.getJSONArray("list");
-                Log.d("JSONARRAY: ", list.toString());
+
                 for (int i = 0; i < list.length(); i++) {
                     JSONObject day = list.getJSONObject(i);
                     JSONObject temperatures = day.getJSONObject("temp");
@@ -194,8 +195,11 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("ITEM POSITION:", " " + pos);
                     }
                 });
-                recyclerView.setAdapter(weatherAdapter);
+
                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                recyclerView.setAdapter(weatherAdapter);
+                recyclerView.addItemDecoration(new DividerItemDecoration(getBaseContext(), DividerItemDecoration.VERTICAL));
+
             } catch (JSONException e) {
                 Log.e("MainActivity", e.getMessage(), e);
             }

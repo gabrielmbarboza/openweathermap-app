@@ -55,9 +55,9 @@ public class WeatherAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolde
         WeatherHolder weatherHolder = (WeatherHolder) holder;
         long unixTime = Calendar.getInstance().getTimeInMillis() / 1000L;
         String today = Util.convertTimestampToDayOfWeek(unixTime);
-        Log.d("COLOR: ", today);
+
         if(today.contentEquals(current.weekDay)) {
-            holder.itemView.setBackgroundColor(Color.parseColor("#B0C4DE"));
+            holder.itemView.setBackgroundColor(Color.parseColor("#DEB887"));
         }
 
         weatherHolder.dayTV.setText(current.weekDay + ": " + current.description);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OpenweathermapApp</string>
+    <string name="app_name">Open Weather Map</string>
     <string name="action_settings">Configurações</string>
     <string name="app_id">d5869abd86aabfbaafd62d585383c182</string>
     <string name="ws_url">http://api.openweathermap.org/data/2.5/forecast/daily?q=</string>
