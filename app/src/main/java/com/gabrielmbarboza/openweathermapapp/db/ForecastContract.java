@@ -2,6 +2,8 @@ package com.gabrielmbarboza.openweathermapapp.db;
 
 import android.provider.BaseColumns;
 
+import com.gabrielmbarboza.openweathermapapp.model.Forecast;
+
 /**
  * Created by gmoraes on 23/05/17.
  */
@@ -56,5 +58,8 @@ public class ForecastContract {
 
         public static final String SQL_DELETE_FORECASTS =
                 "DROP TABLE IF EXISTS " + ForecastEntry.TABLE_NAME;
+
+        public static final String SQL_COUNT_FORECASTS = "SELECT " + ForecastEntry._ID +
+                ", COUNT(*) FROM " + ForecastEntry.TABLE_NAME;
     }
 }
