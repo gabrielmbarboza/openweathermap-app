@@ -57,7 +57,7 @@ public class WeatherAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolde
         String today = Util.convertTimestampToDayOfWeek(unixTime);
 
         if(today.contentEquals(current.weekDay)) {
-            holder.itemView.setBackgroundColor(Color.parseColor("#DEB887"));
+            holder.itemView.setBackgroundColor(Color.parseColor("#F1F1F1"));
         }
 
         weatherHolder.dayTV.setText(current.weekDay + ": " + current.description);
