@@ -18,9 +18,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.gabrielmbarboza.openweathermapapp.db.CityDBOperations;
+import com.gabrielmbarboza.openweathermapapp.db.ForecastDBOperations;
+import com.gabrielmbarboza.openweathermapapp.db.ForecastDbHelper;
+import com.gabrielmbarboza.openweathermapapp.model.City;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +64,22 @@ public class MainActivity extends AppCompatActivity {
         String unit = preferences.getString("degree_scale", "metric");
         String appID = getText(R.string.app_id).toString();
         String wsUrl = getText(R.string.ws_url).toString();
+
+        ForecastDbHelper dbHelper = new ForecastDbHelper(this);
+        ForecastDBOperations forecastOps = new ForecastDBOperations(dbHelper);
+
+        int forecastCount = forecastOps.getCount();
+
+        if(forecastCount == 0 && !getConnectivity()) {
+            Toast toast = Toast.makeText(this, "Você não possuí dados offline e não está conectado a rede", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER_VERTICAL| Gravity.CENTER_HORIZONTAL, 0, 0);
+            toast.show();
+        }
+
+        CityDBOperations cityOp = new CityDBOperations(dbHelper);
+
+        cityOp.addCity(new City("3444924", "Vitoria", "-40.3378", "-20.3195", "BR", 358.875));
+        City cityTest = cityOp.getCity("3444924");
 
         try {
             weatherURL = wsUrl + URLEncoder.encode(city, "UTF-8")
@@ -99,6 +123,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean getConnectivity() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+
+        if (connectivityManager.getActiveNetworkInfo() != null
+                && connectivityManager.getActiveNetworkInfo().isAvailable()
+                && connectivityManager.getActiveNetworkInfo().isConnected()) {
+            connected = true;
+        }
+
+        return connected;
     }
 
     private class WeatherTask extends AsyncTask<String, String, String> {
@@ -169,23 +206,27 @@ public class MainActivity extends AppCompatActivity {
             List<Weather> weatherList = new ArrayList<Weather>();
 
             try {
-                JSONObject json =  new JSONObject(result);
+                if(result != null) {
 
-                JSONArray list = json.getJSONArray("list");
+                    JSONObject json =  new JSONObject(result);
 
-                for (int i = 0; i < list.length(); i++) {
-                    JSONObject day = list.getJSONObject(i);
-                    JSONObject temperatures = day.getJSONObject("temp");
-                    JSONObject weather = day.getJSONArray("weather").getJSONObject(0);
+                    JSONArray list = json.getJSONArray("list");
 
-                    weatherList.add(new Weather(
-                            day.getLong("dt"),
-                            temperatures.getDouble("max"),
-                            temperatures.getDouble("min"),
-                            weather.getString("description"),
-                            weather.getString("icon")
-                    ));
+                    for (int i = 0; i < list.length(); i++) {
+                        JSONObject day = list.getJSONObject(i);
+                        JSONObject temperatures = day.getJSONObject("temp");
+                        JSONObject weather = day.getJSONArray("weather").getJSONObject(0);
+
+                        weatherList.add(new Weather(
+                                day.getLong("dt"),
+                                temperatures.getDouble("max"),
+                                temperatures.getDouble("min"),
+                                weather.getString("description"),
+                                weather.getString("icon")
+                        ));
+                    }
                 }
+
                 recyclerView = (RecyclerView) findViewById(R.id.weather_rv);
                 weatherAdapter = new WeatherAdapter(MainActivity.this, weatherList);
                 weatherAdapter.setClickListener(new View.OnClickListener() {
@@ -204,18 +245,5 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("MainActivity", e.getMessage(), e);
             }
         }
-    }
-
-   private boolean connectivityVerify() {
-        boolean connected = false;
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
-
-        if (connectivityManager.getActiveNetworkInfo() != null
-                && connectivityManager.getActiveNetworkInfo().isAvailable()
-                && connectivityManager.getActiveNetworkInfo().isConnected()) {
-            connected = true;
-        }
-
-        return connected;
     }
 }

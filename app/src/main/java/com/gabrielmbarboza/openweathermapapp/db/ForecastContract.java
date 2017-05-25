@@ -31,6 +31,7 @@ public class ForecastContract {
         public static final String COLUMN_NAME_RAIN = "rain";
         public static final String COLUMN_NAME_ICON = "icon";
         public static final String COLUMN_NAME_CITY_ID = "city_id";
+        public static final String COLUMN_NAME_COUNT = "_count";
 
         public static final String SQL_CREATE_FORECASTS =
                 "CREATE TABLE " + TABLE_NAME + "(" +
@@ -47,12 +48,12 @@ public class ForecastContract {
                         ForecastEntry.COLUMN_NAME_WEATHER_ID + " INTEGER,"+
                         ForecastEntry.COLUMN_NAME_MAIN + " TEXT,"+
                         ForecastEntry.COLUMN_NAME_DESCRIPTION  + " TEXT,"+
-                        ForecastEntry.COLUMN_NAME_SPEED+ " REAL,"+
+                        ForecastEntry.COLUMN_NAME_SPEED + " REAL,"+
                         ForecastEntry.COLUMN_NAME_DEG + " INTEGER,"+
                         ForecastEntry.COLUMN_NAME_CLOUDS + " INTEGER,"+
                         ForecastEntry.COLUMN_NAME_RAIN + " REAL,"+
                         ForecastEntry.COLUMN_NAME_ICON + " TEXT,"+
-                        ForecastEntry.COLUMN_NAME_CITY_ID + " INTEGER,"+
+                        ForecastEntry.COLUMN_NAME_CITY_ID + " INTEGER UNIQUE,"+
                         "FOREIGN KEY ("+ ForecastEntry.COLUMN_NAME_CITY_ID +
                         ") REFERENCES cities ("+ CityContract.CityEntry.COLUMN_NAME_CITY_ID +"))";
 
@@ -60,6 +61,6 @@ public class ForecastContract {
                 "DROP TABLE IF EXISTS " + ForecastEntry.TABLE_NAME;
 
         public static final String SQL_COUNT_FORECASTS = "SELECT " + ForecastEntry._ID +
-                ", COUNT(*) FROM " + ForecastEntry.TABLE_NAME;
+                ", COUNT(*) AS _count FROM " + ForecastEntry.TABLE_NAME;
     }
 }

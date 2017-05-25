@@ -53,12 +53,12 @@ public class Forecast {
         this.city = city;
     }
 
-    public void setID(int _id) {
-        this._id = _id;
-    }
-
     public int getID() {
         return _id;
+    }
+
+    public void setID(int _id) {
+        this._id = _id;
     }
 
     public int getWeatherDate() {

@@ -26,6 +26,16 @@ public class City {
         this.population = population;
     }
 
+    public City(String cityId, String name, String lon, String lat, String country, Double population) {
+        this._id = _id;
+        this.cityId = cityId;
+        this.name = name;
+        this.lon = lon;
+        this.lat = lat;
+        this.country = country;
+        this.population = population;
+    }
+
     public long getID() {
         return _id;
     }

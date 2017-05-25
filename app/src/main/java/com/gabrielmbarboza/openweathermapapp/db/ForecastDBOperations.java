@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.gabrielmbarboza.openweathermapapp.model.City;
 import com.gabrielmbarboza.openweathermapapp.model.Forecast;
 
 import java.util.ArrayList;
@@ -61,6 +62,21 @@ public class ForecastDBOperations {
         values.put(ForecastContract.ForecastEntry.COLUMN_NAME_WEATHER_ID, Forecast.getWeatherId());
         values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DT, Forecast.getWeatherDate());
         values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DESCRIPTION, Forecast.getDescription());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MIN, Forecast.getMin());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MAX, Forecast.getMax());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_CLOUDS, Forecast.getClouds());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DAY, Forecast.getDay());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_EVEN, Forecast.getEven());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_NIGHT, Forecast.getNight());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DEG, Forecast.getDeg());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_HUMIDITY, Forecast.getHumidity());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_SPEED, Forecast.getSpeed());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MAIN, Forecast.getMain());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MORN, Forecast.getMorn());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_PRESSURE, Forecast.getPressure());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_RAIN, Forecast.getRain());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_CITY_ID, Forecast.getCity().getCityId());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_ICON, Forecast.getIcon());
 
         db.insert(ForecastContract.ForecastEntry.TABLE_NAME, null, values);
 
@@ -96,7 +112,7 @@ public class ForecastDBOperations {
 
         Cursor cursor = db.query(
                 ForecastContract.ForecastEntry.TABLE_NAME,
-                projections,
+                mainProjections,
                 null,
                 null,
                 null,
@@ -118,41 +134,97 @@ public class ForecastDBOperations {
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery(ForecastContract.ForecastEntry.SQL_COUNT_FORECASTS, null);
         cursor.moveToFirst();
+        int count = cursor.getInt(cursor.getColumnIndexOrThrow(ForecastContract.ForecastEntry.COLUMN_NAME_COUNT));
         cursor.close();
 
-        return cursor.getCount();
+        return count;
     }
 
     private Forecast createForecast(Cursor cursor) {
-        long _id = cursor.getLong(cursor.getColumnIndexOrThrow(
+        int _id = cursor.getInt(cursor.getColumnIndexOrThrow(
                 ForecastContract.ForecastEntry._ID
         ));
 
-        /*String name = cursor.getString(cursor.getColumnIndexOrThrow(
-                ForecastContract.ForecastEntry.COLUMN_NAME_NAME
+        int weatherId = cursor.getInt(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_WEATHER_ID
         ));
 
-        String ForecastId = cursor.getString(cursor.getColumnIndexOrThrow(
-                ForecastContract.ForecastEntry.COLUMN_NAME_Forecast_ID
+
+        int weatherDate = cursor.getInt(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_DT
         ));
 
-        String country = cursor.getString(cursor.getColumnIndexOrThrow(
-                ForecastContract.ForecastEntry.COLUMN_NAME_COUNTRY
+        String description = cursor.getString(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_DESCRIPTION
         ));
 
-        String lat = cursor.getString(cursor.getColumnIndexOrThrow(
-                ForecastContract.ForecastEntry.COLUMN_NAME_LAT
+        Double min = cursor.getDouble(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_MIN
         ));
 
-        String lon = cursor.getString(cursor.getColumnIndexOrThrow(
-                ForecastContract.ForecastEntry.COLUMN_NAME_LON
+        Double max = cursor.getDouble(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_MAX
         ));
 
-        Double population = cursor.getDouble(cursor.getColumnIndexOrThrow(
-               ForecastContract.ForecastEntry.COLUMN_NAME_POPULATION
-        ));*/
+        int clouds = cursor.getInt(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_CLOUDS
+        ));
 
-        Forecast Forecast = new Forecast();
+        int day = cursor.getInt(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_DAY
+        ));
+
+        Double even = cursor.getDouble(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_EVEN
+        ));
+
+        Double night = cursor.getDouble(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_NIGHT
+        ));
+
+        int deg = cursor.getInt(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_DEG
+        ));
+
+        int humidity = cursor.getInt(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_HUMIDITY
+        ));
+
+        Double speed = cursor.getDouble(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_SPEED
+        ));
+
+        String main = cursor.getString(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_MAIN
+        ));
+
+        Double morn = cursor.getDouble(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_MORN
+        ));
+
+        Double pressure = cursor.getDouble(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_PRESSURE
+        ));
+
+        Double rain = cursor.getDouble(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_RAIN
+        ));
+
+        String cityId = cursor.getString(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_CITY_ID
+        ));
+
+        String icon = cursor.getString(cursor.getColumnIndexOrThrow(
+                ForecastContract.ForecastEntry.COLUMN_NAME_ICON
+        ));
+
+        CityDBOperations cityOp = new CityDBOperations(helper);
+        City city = cityOp.getCity(cityId);
+
+        Forecast Forecast = new Forecast( _id, weatherDate, day, min, max, night, even,
+                morn, pressure, humidity, weatherId, main, description, speed, deg, clouds,
+                rain, icon, city
+        );
 
         return Forecast;
     }
