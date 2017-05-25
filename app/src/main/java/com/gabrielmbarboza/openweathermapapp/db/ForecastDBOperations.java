@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.gabrielmbarboza.openweathermapapp.model.City;
-import com.gabrielmbarboza.openweathermapapp.model.Forecast;
+import com.gabrielmbarboza.openweathermapapp.db.model.City;
+import com.gabrielmbarboza.openweathermapapp.db.model.Forecast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +98,7 @@ public class ForecastDBOperations {
 
         cursor.moveToFirst();
 
-        Forecast Forecast = createForecast(cursor);
+        Forecast Forecast = toForecast(cursor);
 
         cursor.close();
 
@@ -121,7 +121,7 @@ public class ForecastDBOperations {
         );
 
         while (cursor.moveToNext()) {
-            Forecast Forecast = createForecast(cursor);
+            Forecast Forecast = toForecast(cursor);
             cities.add(Forecast);
         }
 
@@ -140,7 +140,7 @@ public class ForecastDBOperations {
         return count;
     }
 
-    private Forecast createForecast(Cursor cursor) {
+    private Forecast toForecast(Cursor cursor) {
         int _id = cursor.getInt(cursor.getColumnIndexOrThrow(
                 ForecastContract.ForecastEntry._ID
         ));

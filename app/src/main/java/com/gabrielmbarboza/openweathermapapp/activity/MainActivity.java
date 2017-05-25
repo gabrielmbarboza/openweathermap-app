@@ -1,6 +1,7 @@
-package com.gabrielmbarboza.openweathermapapp;
+package com.gabrielmbarboza.openweathermapapp.activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 
 import android.net.ConnectivityManager;
@@ -9,25 +10,27 @@ import android.os.AsyncTask;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.gabrielmbarboza.openweathermapapp.R;
+import com.gabrielmbarboza.openweathermapapp.Weather;
+import com.gabrielmbarboza.openweathermapapp.adapter.ForecastAdapter;
 import com.gabrielmbarboza.openweathermapapp.db.CityDBOperations;
 import com.gabrielmbarboza.openweathermapapp.db.ForecastDBOperations;
 import com.gabrielmbarboza.openweathermapapp.db.ForecastDbHelper;
-import com.gabrielmbarboza.openweathermapapp.model.City;
+import com.gabrielmbarboza.openweathermapapp.db.model.City;
+import com.gabrielmbarboza.openweathermapapp.db.model.Forecast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +49,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-    private WeatherAdapter weatherAdapter;
+    private ForecastAdapter forecastAdapter;
     private RecyclerView recyclerView;
     private String weatherURL;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -64,22 +67,6 @@ public class MainActivity extends AppCompatActivity {
         String unit = preferences.getString("degree_scale", "metric");
         String appID = getText(R.string.app_id).toString();
         String wsUrl = getText(R.string.ws_url).toString();
-
-        ForecastDbHelper dbHelper = new ForecastDbHelper(this);
-        ForecastDBOperations forecastOps = new ForecastDBOperations(dbHelper);
-
-        int forecastCount = forecastOps.getCount();
-
-        if(forecastCount == 0 && !getConnectivity()) {
-            Toast toast = Toast.makeText(this, "Você não possuí dados offline e não está conectado a rede", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER_VERTICAL| Gravity.CENTER_HORIZONTAL, 0, 0);
-            toast.show();
-        }
-
-        CityDBOperations cityOp = new CityDBOperations(dbHelper);
-
-        cityOp.addCity(new City("3444924", "Vitoria", "-40.3378", "-20.3195", "BR", 358.875));
-        City cityTest = cityOp.getCity("3444924");
 
         try {
             weatherURL = wsUrl + URLEncoder.encode(city, "UTF-8")
@@ -99,6 +86,24 @@ public class MainActivity extends AppCompatActivity {
 
         new WeatherTask().execute();
 
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Sem conectividade!");
+        builder.setMessage("Você não possuí dados offline e não está conectado a rede");
+
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+
+        alert.show();
     }
 
     @Override
@@ -154,14 +159,21 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            try {
-                url = new URL(weatherURL);
+            ForecastDbHelper dbHelper = new ForecastDbHelper(getBaseContext());
+            ForecastDBOperations forecastOps = new ForecastDBOperations(dbHelper);
+
+            int forecastCount = forecastOps.getCount();
+
+            if(forecastCount == 0 && !getConnectivity()) {
+                showAlertDialog();
+            } else if (forecastCount == 0 && getConnectivity()) {
+
             }
-            catch (MalformedURLException e) {
-                Snackbar.make(findViewById(R.id.coordinatorLayout),
-                        "Erro no formato da URL", Snackbar.LENGTH_LONG).show();
-                Log.e("MainActivity", e.getMessage(), e);
-            }
+
+            CityDBOperations cityOp = new CityDBOperations(dbHelper);
+
+            //cityOp.addCity(new City("3444924", "Vitoria", "-40.3378", "-20.3195", "BR", 358.875));
+            //City cityTest = cityOp.getCity("3444924");
 
             try {
                 connection = (HttpURLConnection) url.openConnection();
@@ -192,6 +204,15 @@ public class MainActivity extends AppCompatActivity {
                 connection.disconnect();
             }
 
+            try {
+                url = new URL(weatherURL);
+            }
+            catch (MalformedURLException e) {
+                Snackbar.make(findViewById(R.id.coordinatorLayout),
+                        "Erro no formato da URL", Snackbar.LENGTH_LONG).show();
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+
             return null;
         }
 
@@ -202,48 +223,86 @@ public class MainActivity extends AppCompatActivity {
             swipeRefreshLayout.setRefreshing(false);
         }
 
-        private void getJsonToArrayList(String result) {
-            List<Weather> weatherList = new ArrayList<Weather>();
+        private List<Forecast> getJsonToArrayList(String result) {
+            List<Forecast> forecasts = new ArrayList<Forecast>();
 
             try {
                 if(result != null) {
 
                     JSONObject json =  new JSONObject(result);
 
+                    JSONObject cityObj = json.getJSONObject("city");
+                    JSONObject coordObj = cityObj.getJSONObject("city");
+
+                    City city = new City(
+                            cityObj.getString("id"),
+                            cityObj.getString("name"),
+                            cityObj.getString("lon"),
+                            cityObj.getString("lat"),
+                            cityObj.getString("country"),
+                            cityObj.getDouble("population")
+                    );
+
                     JSONArray list = json.getJSONArray("list");
 
                     for (int i = 0; i < list.length(); i++) {
-                        JSONObject day = list.getJSONObject(i);
-                        JSONObject temperatures = day.getJSONObject("temp");
-                        JSONObject weather = day.getJSONArray("weather").getJSONObject(0);
+                        JSONObject obj = list.getJSONObject(i);
+                        JSONObject temperatures = obj.getJSONObject("temp");
+                        JSONObject weather = obj.getJSONArray("weather").getJSONObject(0);
 
-                        weatherList.add(new Weather(
-                                day.getLong("dt"),
+                        /*Forecast forecast = new Forecast(
+                                 weather.getLong("dt"),
+                        int day,
+                        Double min,
+                        Double max,
+                        Double night,
+                        Double even,
+                        Double morn,
+                        Double pressure,
+                        int humidity,
+                        int weatherId,
+                        String main,
+                        String description,
+                        Double speed,
+                        int deg,
+                        int clouds,
+                        Double rain, String icon,
+                                City city
+                        );
+
+
+                        forecasts.add(new Forecast(
+                                obj.getLong("dt"),
                                 temperatures.getDouble("max"),
                                 temperatures.getDouble("min"),
                                 weather.getString("description"),
                                 weather.getString("icon")
-                        ));
+
+                        ));*/
                     }
                 }
-
-                recyclerView = (RecyclerView) findViewById(R.id.weather_rv);
-                weatherAdapter = new WeatherAdapter(MainActivity.this, weatherList);
-                weatherAdapter.setClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int pos = recyclerView.indexOfChild(v);
-                        Log.d("ITEM POSITION:", " " + pos);
-                    }
-                });
-
-                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                recyclerView.setAdapter(weatherAdapter);
-                recyclerView.addItemDecoration(new DividerItemDecoration(getBaseContext(), DividerItemDecoration.VERTICAL));
 
             } catch (JSONException e) {
                 Log.e("MainActivity", e.getMessage(), e);
             }
+
+            return forecasts;
+        }
+
+        private void addForecastsToAdapter(List<Forecast> forecasts) {
+            recyclerView = (RecyclerView) findViewById(R.id.weather_rv);
+            forecastAdapter = new ForecastAdapter(MainActivity.this, forecasts);
+            forecastAdapter.setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = recyclerView.indexOfChild(v);
+                    Log.d("ITEM POSITION:", " " + pos);
+                }
+            });
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            recyclerView.setAdapter(forecastAdapter);
+            recyclerView.addItemDecoration(new DividerItemDecoration(getBaseContext(), DividerItemDecoration.VERTICAL));
         }
     }
 }

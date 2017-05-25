@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.gabrielmbarboza.openweathermapapp.model.City;
+import com.gabrielmbarboza.openweathermapapp.db.model.City;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,7 @@
 package com.gabrielmbarboza.openweathermapapp;
 
+import com.gabrielmbarboza.openweathermapapp.util.Util;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;

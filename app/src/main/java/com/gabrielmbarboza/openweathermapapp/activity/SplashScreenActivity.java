@@ -1,4 +1,4 @@
-package com.gabrielmbarboza.openweathermapapp;
+package com.gabrielmbarboza.openweathermapapp.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

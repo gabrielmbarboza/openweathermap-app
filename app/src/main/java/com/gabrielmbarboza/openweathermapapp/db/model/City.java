@@ -1,4 +1,4 @@
-package com.gabrielmbarboza.openweathermapapp.model;
+package com.gabrielmbarboza.openweathermapapp.db.model;
 
 /**
  * Created by gmoraes on 24/05/17.

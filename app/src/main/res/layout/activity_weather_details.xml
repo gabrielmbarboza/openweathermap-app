@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.gabrielmbarboza.openweathermapapp.WeatherDetailsActivity">
+    tools:context="com.gabrielmbarboza.openweathermapapp.activity.ForecastDetailsActivity">
 
     <ImageView
         android:id="@+id/condition_detail_iv"

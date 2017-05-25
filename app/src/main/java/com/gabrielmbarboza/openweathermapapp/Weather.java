@@ -1,5 +1,7 @@
 package com.gabrielmbarboza.openweathermapapp;
 
+import com.gabrielmbarboza.openweathermapapp.util.Util;
+
 /**
  * Created by gabriel on 14/05/17.
  */

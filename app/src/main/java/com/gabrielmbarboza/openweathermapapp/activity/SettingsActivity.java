@@ -1,8 +1,10 @@
-package com.gabrielmbarboza.openweathermapapp;
+package com.gabrielmbarboza.openweathermapapp.activity;
 
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
+
+import com.gabrielmbarboza.openweathermapapp.R;
 
 public class SettingsActivity extends PreferenceActivity {
 

@@ -1,4 +1,6 @@
-package com.gabrielmbarboza.openweathermapapp.model;
+package com.gabrielmbarboza.openweathermapapp.db.model;
+
+import com.gabrielmbarboza.openweathermapapp.util.Util;
 
 /**
  * Created by gmoraes on 24/05/17.
@@ -6,7 +8,7 @@ package com.gabrielmbarboza.openweathermapapp.model;
 
 public class Forecast {
     private int _id;
-    private int weatherDate;
+    private long weatherDate;
     private int day;
     private Double min;
     private Double max;
@@ -24,11 +26,13 @@ public class Forecast {
     private Double rain;
     private String icon;
     private City city;
+    private String iconUrl;
+    private String weekDay;
 
     public Forecast() {
     }
 
-    public Forecast(int _id, int weatherDate, int day, Double min, Double max, Double night, Double even,
+    public Forecast(int _id, long weatherDate, int day, Double min, Double max, Double night, Double even,
                     Double morn, Double pressure, int humidity, int weatherId,
                     String main, String description, Double speed, int deg, int clouds,
                     Double rain, String icon, City city) {
@@ -51,7 +55,41 @@ public class Forecast {
         this.rain = rain;
         this.icon = icon;
         this.city = city;
+
+        this.weekDay = Util.convertTimestampToDayOfWeek(weatherDate);
+        this.description = description;
+        this.iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
     }
+
+    public Forecast(long weatherDate, int day, Double min, Double max, Double night, Double even,
+                    Double morn, Double pressure, int humidity, int weatherId,
+                    String main, String description, Double speed, int deg, int clouds,
+                    Double rain, String icon, City city) {
+        this.weatherDate = weatherDate;
+        this.day = day;
+        this.min = min;
+        this.max = max;
+        this.night = night;
+        this.even = even;
+        this.morn = morn;
+        this.pressure = pressure;
+        this.humidity = humidity;
+        this.weatherId = weatherId;
+        this.main = main;
+        this.description = description;
+        this.speed = speed;
+        this.deg = deg;
+        this.clouds = clouds;
+        this.rain = rain;
+        this.icon = icon;
+        this.city = city;
+
+        this.weekDay = Util.convertTimestampToDayOfWeek(weatherDate);
+        this.description = description;
+        this.iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
+    }
+
+
 
     public int getID() {
         return _id;
@@ -61,11 +99,11 @@ public class Forecast {
         this._id = _id;
     }
 
-    public int getWeatherDate() {
+    public long getWeatherDate() {
         return weatherDate;
     }
 
-    public void setWeatherDate(int weatherDate) {
+    public void setWeatherDate(long weatherDate) {
         this.weatherDate = weatherDate;
     }
 
@@ -203,5 +241,21 @@ public class Forecast {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public String getWeekDay() {
+        return weekDay;
+    }
+
+    public void setWeekDay(String weekDay) {
+        this.weekDay = weekDay;
     }
 }

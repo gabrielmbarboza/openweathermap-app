@@ -1,4 +1,4 @@
-package com.gabrielmbarboza.openweathermapapp;
+package com.gabrielmbarboza.openweathermapapp.util;
 
 import android.net.ConnectivityManager;
 
@@ -18,6 +18,14 @@ public class Util {
         cal.add(Calendar.MILLISECOND, timeZone.getOffset(cal.getTimeInMillis()));
         SimpleDateFormat df = new SimpleDateFormat("EEEE");
 
-        return df.format(cal.getTime());
+        String weekDay = df.format(cal.getTime());
+
+        char[] arr = weekDay.toCharArray();
+
+        arr[0] = Character.toUpperCase(arr[0]);
+
+        weekDay = new String(arr);
+
+        return weekDay;
     }
 }

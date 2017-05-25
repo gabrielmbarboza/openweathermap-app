@@ -1,4 +1,4 @@
-package com.gabrielmbarboza.openweathermapapp;
+package com.gabrielmbarboza.openweathermapapp.activity;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class WeatherDetailsActivity extends AppCompatActivity {
+import com.gabrielmbarboza.openweathermapapp.R;
+
+public class ForecastDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
