@@ -34,5 +34,5 @@ https://github.com/gabrielmbarboza/openweathermap-app.git
 
 1. Ao iniciar o app será listada as previs&otilde;es do tempo de uma determinada localização.
 2. Clique no menu principal e ap&oacute;s clique em configurações.
-3. Escolha a localização no formato "Vit&oacute;,BR" e a escala em graus, Celsius ou Farenheit.
+3. Escolha a localização no formato "Vit&oacute;ria,BR" e a escala em graus, Celsius ou Farenheit.
 4. Na lista clique em qualquer previsão para visualizar os detalhes.
