@@ -83,6 +83,14 @@ public class ForecastDBOperations {
         db.close();
     }
 
+    public void addAll(List<Forecast> forecasts) {
+        if(forecasts != null && !forecasts.isEmpty()) {
+            for (Forecast forecast : forecasts) {
+                addForecast(forecast);
+            }
+        }
+    }
+
     public Forecast getForecast(String ForecastId) {
         SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -112,7 +120,7 @@ public class ForecastDBOperations {
 
         Cursor cursor = db.query(
                 ForecastContract.ForecastEntry.TABLE_NAME,
-                mainProjections,
+                projections,
                 null,
                 null,
                 null,
@@ -145,7 +153,7 @@ public class ForecastDBOperations {
                 ForecastContract.ForecastEntry._ID
         ));
 
-        int weatherId = cursor.getInt(cursor.getColumnIndexOrThrow(
+        String weatherId = cursor.getString(cursor.getColumnIndexOrThrow(
                 ForecastContract.ForecastEntry.COLUMN_NAME_WEATHER_ID
         ));
 

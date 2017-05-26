@@ -34,20 +34,20 @@ public class CityDBOperations {
     }
 
     public void addCity(City city) {
-        SQLiteDatabase db = helper.getWritableDatabase();
+            SQLiteDatabase db = helper.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
+            ContentValues values = new ContentValues();
 
-        values.put(CityContract.CityEntry.COLUMN_NAME_NAME, city.getName());
-        values.put(CityContract.CityEntry.COLUMN_NAME_CITY_ID, city.getCityId());
-        values.put(CityContract.CityEntry.COLUMN_NAME_COUNTRY, city.getCountry());
-        values.put(CityContract.CityEntry.COLUMN_NAME_LAT, city.getLat());
-        values.put(CityContract.CityEntry.COLUMN_NAME_LON, city.getLon());
-        values.put(CityContract.CityEntry.COLUMN_NAME_POPULATION, city.getPopulation());
+            values.put(CityContract.CityEntry.COLUMN_NAME_NAME, city.getName());
+            values.put(CityContract.CityEntry.COLUMN_NAME_CITY_ID, city.getCityId());
+            values.put(CityContract.CityEntry.COLUMN_NAME_COUNTRY, city.getCountry());
+            values.put(CityContract.CityEntry.COLUMN_NAME_LAT, city.getLat());
+            values.put(CityContract.CityEntry.COLUMN_NAME_LON, city.getLon());
+            values.put(CityContract.CityEntry.COLUMN_NAME_POPULATION, city.getPopulation());
 
-        db.insert(CityContract.CityEntry.TABLE_NAME, null, values);
+            db.insert(CityContract.CityEntry.TABLE_NAME, null, values);
 
-        db.close();
+            db.close();
     }
 
     public City getCity(String cityId) {
@@ -70,6 +70,13 @@ public class CityDBOperations {
         cursor.close();
 
         return city;
+    }
+
+    //TODO: Refatorar
+    public boolean isCityExist(String cityId) {
+        City city = getCity(cityId);
+
+        return (city.getCityId() != null);
     }
 
     public List<City> getAllCities() {

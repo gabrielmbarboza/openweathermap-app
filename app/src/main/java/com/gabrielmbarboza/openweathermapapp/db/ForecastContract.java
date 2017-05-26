@@ -11,7 +11,7 @@ public class ForecastContract {
 
     public static class ForecastEntry implements BaseColumns {
         public static final String TABLE_NAME = "forecasts";
-        public static final String COLUMN_NAME_DT = "dt,";
+        public static final String COLUMN_NAME_DT = "dt";
         public static final String COLUMN_NAME_DAY = "day";
         public static final String COLUMN_NAME_MIN = "min";
         public static final String COLUMN_NAME_MAX = "max";
@@ -43,7 +43,7 @@ public class ForecastContract {
                         ForecastEntry.COLUMN_NAME_MORN + " REAL,"+
                         ForecastEntry.COLUMN_NAME_PRESSURE + " REAL,"+
                         ForecastEntry.COLUMN_NAME_HUMIDITY + " INTEGER,"+
-                        ForecastEntry.COLUMN_NAME_WEATHER_ID + " INTEGER,"+
+                        ForecastEntry.COLUMN_NAME_WEATHER_ID + " TEXT,"+
                         ForecastEntry.COLUMN_NAME_MAIN + " TEXT,"+
                         ForecastEntry.COLUMN_NAME_DESCRIPTION  + " TEXT,"+
                         ForecastEntry.COLUMN_NAME_SPEED + " REAL,"+
@@ -51,7 +51,7 @@ public class ForecastContract {
                         ForecastEntry.COLUMN_NAME_CLOUDS + " INTEGER,"+
                         ForecastEntry.COLUMN_NAME_RAIN + " REAL,"+
                         ForecastEntry.COLUMN_NAME_ICON + " TEXT,"+
-                        ForecastEntry.COLUMN_NAME_CITY_ID + " INTEGER UNIQUE,"+
+                        ForecastEntry.COLUMN_NAME_CITY_ID + " INTEGER,"+
                         "FOREIGN KEY ("+ ForecastEntry.COLUMN_NAME_CITY_ID +
                         ") REFERENCES cities ("+ CityContract.CityEntry.COLUMN_NAME_CITY_ID +"))";
 

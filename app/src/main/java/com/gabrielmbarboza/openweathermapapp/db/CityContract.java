@@ -17,11 +17,12 @@ public final class CityContract {
        public static final String COLUMN_NAME_LAT = "lat";
        public static final String COLUMN_NAME_COUNTRY = "country";
        public static final String COLUMN_NAME_POPULATION = "population";
+       public static final String COLUMN_NAME_COUNT = "_count";
 
        public static final String SQL_CREATE_CITIES =
                "CREATE TABLE " + TABLE_NAME + "(" +
                        CityEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                       CityEntry.COLUMN_NAME_CITY_ID + " TEXT,"+
+                       CityEntry.COLUMN_NAME_CITY_ID + " TEXT  UNIQUE,"+
                        CityEntry.COLUMN_NAME_NAME + " TEXT,"+
                        CityEntry.COLUMN_NAME_LON + " TEXT,"+
                        CityEntry.COLUMN_NAME_LAT + " TEXT,"+

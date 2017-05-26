@@ -6,4 +6,6 @@
     <string name="max_temp">Máxima: %d</string>
     <string name="min_temp">Minima: %d</string>
     <string name="hint_txt">Informe a cidade. Ex. (Vitória, BR)</string>
+    <string name="no_conectivity">Sem conectividade</string>
+    <string name="no_conectivity_message">Você não possuí dados offline e não está conectado a rede</string>
 </resources>

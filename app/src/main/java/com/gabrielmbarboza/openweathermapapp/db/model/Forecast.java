@@ -8,7 +8,7 @@ import com.gabrielmbarboza.openweathermapapp.util.Util;
 
 public class Forecast {
     private int _id;
-    private long weatherDate;
+    private int weatherDate;
     private int day;
     private Double min;
     private Double max;
@@ -17,7 +17,7 @@ public class Forecast {
     private Double morn;
     private Double pressure;
     private int humidity;
-    private int weatherId;
+    private String weatherId;
     private String main;
     private String description;
     private Double speed;
@@ -32,8 +32,8 @@ public class Forecast {
     public Forecast() {
     }
 
-    public Forecast(int _id, long weatherDate, int day, Double min, Double max, Double night, Double even,
-                    Double morn, Double pressure, int humidity, int weatherId,
+    public Forecast(int _id, int weatherDate, int day, Double min, Double max, Double night, Double even,
+                    Double morn, Double pressure, int humidity, String weatherId,
                     String main, String description, Double speed, int deg, int clouds,
                     Double rain, String icon, City city) {
         this._id = _id;
@@ -61,8 +61,8 @@ public class Forecast {
         this.iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
     }
 
-    public Forecast(long weatherDate, int day, Double min, Double max, Double night, Double even,
-                    Double morn, Double pressure, int humidity, int weatherId,
+    public Forecast(int weatherDate, int day, Double min, Double max, Double night, Double even,
+                    Double morn, Double pressure, int humidity, String weatherId,
                     String main, String description, Double speed, int deg, int clouds,
                     Double rain, String icon, City city) {
         this.weatherDate = weatherDate;
@@ -99,11 +99,11 @@ public class Forecast {
         this._id = _id;
     }
 
-    public long getWeatherDate() {
+    public int getWeatherDate() {
         return weatherDate;
     }
 
-    public void setWeatherDate(long weatherDate) {
+    public void setWeatherDate(int weatherDate) {
         this.weatherDate = weatherDate;
     }
 
@@ -171,11 +171,11 @@ public class Forecast {
         this.humidity = humidity;
     }
 
-    public int getWeatherId() {
+    public String getWeatherId() {
         return weatherId;
     }
 
-    public void setWeatherId(int weather_id) {
+    public void setWeatherId(String weather_id) {
         this.weatherId = weather_id;
     }
 
