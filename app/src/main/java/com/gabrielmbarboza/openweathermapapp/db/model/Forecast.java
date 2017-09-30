@@ -7,27 +7,27 @@ import com.gabrielmbarboza.openweathermapapp.util.Util;
  */
 
 public class Forecast {
-    private int _id;
-    private int weatherDate;
-    private int day;
-    private Double min;
-    private Double max;
-    private Double night;
-    private Double even;
-    private Double morn;
-    private Double pressure;
-    private int humidity;
-    private String weatherId;
-    private String main;
-    private String description;
-    private Double speed;
-    private int deg;
-    private int clouds;
-    private Double rain;
-    private String icon;
-    private City city;
-    private String iconUrl;
-    private String weekDay;
+    public int _id;
+    public int weatherDate;
+    public int day;
+    public Double min;
+    public Double max;
+    public Double night;
+    public Double even;
+    public Double morn;
+    public Double pressure;
+    public int humidity;
+    public String weatherId;
+    public String main;
+    public String description;
+    public Double speed;
+    public int deg;
+    public int clouds;
+    public Double rain;
+    public String icon;
+    public City city;
+    public String iconUrl;
+    public String weekDay;
 
     public Forecast() {
     }
@@ -87,175 +87,5 @@ public class Forecast {
         this.weekDay = Util.convertTimestampToDayOfWeek(weatherDate);
         this.description = description;
         this.iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
-    }
-
-
-
-    public int getID() {
-        return _id;
-    }
-
-    public void setID(int _id) {
-        this._id = _id;
-    }
-
-    public int getWeatherDate() {
-        return weatherDate;
-    }
-
-    public void setWeatherDate(int weatherDate) {
-        this.weatherDate = weatherDate;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public Double getMin() {
-        return min;
-    }
-
-    public void setMin(Double min) {
-        this.min = min;
-    }
-
-    public Double getMax() {
-        return max;
-    }
-
-    public void setMax(Double max) {
-        this.max = max;
-    }
-
-    public Double getNight() {
-        return night;
-    }
-
-    public void setNight(Double night) {
-        this.night = night;
-    }
-
-    public Double getEven() {
-        return even;
-    }
-
-    public void setEven(Double even) {
-        this.even = even;
-    }
-
-    public Double getMorn() {
-        return morn;
-    }
-
-    public void setMorn(Double morn) {
-        this.morn = morn;
-    }
-
-    public Double getPressure() {
-        return pressure;
-    }
-
-    public void setPressure(Double pressure) {
-        this.pressure = pressure;
-    }
-
-    public int getHumidity() {
-        return humidity;
-    }
-
-    public void setHumidity(int humidity) {
-        this.humidity = humidity;
-    }
-
-    public String getWeatherId() {
-        return weatherId;
-    }
-
-    public void setWeatherId(String weather_id) {
-        this.weatherId = weather_id;
-    }
-
-    public String getMain() {
-        return main;
-    }
-
-    public void setMain(String main) {
-        this.main = main;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(Double speed) {
-        this.speed = speed;
-    }
-
-    public int getDeg() {
-        return deg;
-    }
-
-    public void setDeg(int deg) {
-        this.deg = deg;
-    }
-
-    public int getClouds() {
-        return clouds;
-    }
-
-    public void setClouds(int clouds) {
-        this.clouds = clouds;
-    }
-
-    public Double getRain() {
-        return rain;
-    }
-
-    public void setRain(Double rain) {
-        this.rain = rain;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
-    public String getIconUrl() {
-        return iconUrl;
-    }
-
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
-    }
-
-    public String getWeekDay() {
-        return weekDay;
-    }
-
-    public void setWeekDay(String weekDay) {
-        this.weekDay = weekDay;
     }
 }

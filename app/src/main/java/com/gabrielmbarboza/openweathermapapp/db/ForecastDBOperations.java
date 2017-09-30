@@ -59,24 +59,24 @@ public class ForecastDBOperations {
 
         ContentValues values = new ContentValues();
 
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_WEATHER_ID, Forecast.getWeatherId());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DT, Forecast.getWeatherDate());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DESCRIPTION, Forecast.getDescription());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MIN, Forecast.getMin());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MAX, Forecast.getMax());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_CLOUDS, Forecast.getClouds());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DAY, Forecast.getDay());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_EVEN, Forecast.getEven());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_NIGHT, Forecast.getNight());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DEG, Forecast.getDeg());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_HUMIDITY, Forecast.getHumidity());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_SPEED, Forecast.getSpeed());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MAIN, Forecast.getMain());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MORN, Forecast.getMorn());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_PRESSURE, Forecast.getPressure());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_RAIN, Forecast.getRain());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_CITY_ID, Forecast.getCity().getCityId());
-        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_ICON, Forecast.getIcon());
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_WEATHER_ID, Forecast.weatherId);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DT, Forecast.weatherDate);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DESCRIPTION, Forecast.description);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MIN, Forecast.min);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MAX, Forecast.max);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_CLOUDS, Forecast.clouds);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DAY, Forecast.day);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_EVEN, Forecast.even);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_NIGHT, Forecast.night);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_DEG, Forecast.deg);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_HUMIDITY, Forecast.humidity);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_SPEED, Forecast.speed);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MAIN, Forecast.main);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_MORN, Forecast.morn);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_PRESSURE, Forecast.pressure);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_RAIN, Forecast.rain);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_CITY_ID, Forecast.city.cityId);
+        values.put(ForecastContract.ForecastEntry.COLUMN_NAME_ICON, Forecast.icon);
 
         db.insert(ForecastContract.ForecastEntry.TABLE_NAME, null, values);
 
@@ -229,7 +229,7 @@ public class ForecastDBOperations {
         CityDBOperations cityOp = new CityDBOperations(helper);
         City city = cityOp.getCity(cityId);
 
-        Forecast Forecast = new Forecast( _id, weatherDate, day, min, max, night, even,
+        Forecast Forecast = new Forecast(_id, weatherDate, day, min, max, night, even,
                 morn, pressure, humidity, weatherId, main, description, speed, deg, clouds,
                 rain, icon, city
         );

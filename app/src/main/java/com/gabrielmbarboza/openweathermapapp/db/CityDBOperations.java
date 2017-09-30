@@ -38,12 +38,12 @@ public class CityDBOperations {
 
             ContentValues values = new ContentValues();
 
-            values.put(CityContract.CityEntry.COLUMN_NAME_NAME, city.getName());
-            values.put(CityContract.CityEntry.COLUMN_NAME_CITY_ID, city.getCityId());
-            values.put(CityContract.CityEntry.COLUMN_NAME_COUNTRY, city.getCountry());
-            values.put(CityContract.CityEntry.COLUMN_NAME_LAT, city.getLat());
-            values.put(CityContract.CityEntry.COLUMN_NAME_LON, city.getLon());
-            values.put(CityContract.CityEntry.COLUMN_NAME_POPULATION, city.getPopulation());
+            values.put(CityContract.CityEntry.COLUMN_NAME_NAME, city.name);
+            values.put(CityContract.CityEntry.COLUMN_NAME_CITY_ID, city.cityId);
+            values.put(CityContract.CityEntry.COLUMN_NAME_COUNTRY, city.country);
+            values.put(CityContract.CityEntry.COLUMN_NAME_LAT, city.lat);
+            values.put(CityContract.CityEntry.COLUMN_NAME_LON, city.lon);
+            values.put(CityContract.CityEntry.COLUMN_NAME_POPULATION, city.population);
 
             db.insert(CityContract.CityEntry.TABLE_NAME, null, values);
 
@@ -76,7 +76,7 @@ public class CityDBOperations {
     public boolean isCityExist(String cityId) {
         City city = getCity(cityId);
 
-        return (city.getCityId() != null);
+        return (city.cityId != null);
     }
 
     public List<City> getAllCities() {
